@@ -19,7 +19,8 @@ st.write(
 
 st.write(
     "Se você é desenvolvedor ou tem curiosidade em tecnologia, pode "
-    "analisar a arquitetura e o código-fonte deste agente diretamente no [GitHub](link)."
+    "analisar a arquitetura e o código-fonte deste agente diretamente no "
+    "[GitHub](https://github.com/ldeveloper1/assistente-virtual-luis/blob/main/app.py)."
 )
 
 if "mensagens" not in st.session_state:
