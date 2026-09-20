@@ -3,7 +3,7 @@ from openai import OpenAI
 import json
 import os
 from pypdf import PdfReader
-import gradio as gr
+import streamlit as st
 
 
 load_dotenv(override=True)
@@ -298,6 +298,51 @@ if __name__ == "__main__":
 
     me = Me()
 
-    gr.ChatInterface(
-        me.chat
-    ).launch()
+    st.title("Assistente Virtual - Luis")
+
+    if "mensagens" not in st.session_state:
+        st.session_state.mensagens = []
+
+    for mensagem in st.session_state.mensagens:
+
+        with st.chat_message(mensagem["role"]):
+            st.write(mensagem["content"])
+
+    mensagem_usuario = st.chat_input(
+        "Faça uma pergunta sobre minha carreira..."
+    )
+
+    if mensagem_usuario:
+
+        st.session_state.mensagens.append(
+            {
+                "role": "user",
+                "content": mensagem_usuario
+            }
+        )
+
+        with st.chat_message("user"):
+            st.write(mensagem_usuario)
+
+        historico = [
+            {
+                "role": mensagem["role"],
+                "content": mensagem["content"]
+            }
+            for mensagem in st.session_state.mensagens[:-1]
+        ]
+
+        resposta = me.chat(
+            mensagem_usuario,
+            historico
+        )
+
+        st.session_state.mensagens.append(
+            {
+                "role": "assistant",
+                "content": resposta
+            }
+        )
+
+        with st.chat_message("assistant"):
+            st.write(resposta)
