@@ -4,5 +4,7 @@ venv/
 __pycache__/
 *.pyc
 .DS_Store
-curriculo.txt
+
+dados/curriculo_luis_carlos.pdf
 dados/curriculo.txt
+dados/resumo.txt

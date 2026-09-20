@@ -7,3 +7,4 @@ __pycache__/
 
 dados/curriculo_luis_carlos.pdf
 dados/curriculo.txt
+dados/resumo.txt
