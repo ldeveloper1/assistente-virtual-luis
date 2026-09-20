@@ -46,19 +46,23 @@ class Me:
 
                 self.curriculo = arquivo.read()
 
-        caminho_resumo = os.path.join(
-            diretorio_projeto,
-            "dados",
-            "resumo.txt"
-        )
+        self.resumo = os.getenv("RESUMO")
 
-        with open(
-            caminho_resumo,
-            "r",
-            encoding="utf-8"
-        ) as arquivo:
+        if not self.resumo:
 
-            self.resumo = arquivo.read()
+            caminho_resumo = os.path.join(
+                diretorio_projeto,
+                "dados",
+                "resumo.txt"
+            )
+
+            with open(
+                caminho_resumo,
+                "r",
+                encoding="utf-8"
+            ) as arquivo:
+
+                self.resumo = arquivo.read()
 
 
     def executar_chamada_ferramenta(self, chamadas):
