@@ -1,16 +1,19 @@
 from openai import OpenAI
-from pypdf import PdfReader
+from dotenv import load_dotenv
 import json
 import os
-from dotenv import load_dotenv
+
 from assistente.ferramentas import (
-                                    ferramentas,
-                                    registrar_dados_usuario,
-                                    registrar_pergunta_desconhecida
-                                )
+    ferramentas,
+    registrar_dados_usuario,
+    registrar_pergunta_desconhecida
+)
+
 from assistente.prompt import criar_system_prompt
 
+
 load_dotenv(override=True)
+
 
 class Me:
 
@@ -25,34 +28,23 @@ class Me:
             )
         )
 
-        caminho_pdf = os.path.join(
-            diretorio_projeto,
-            "dados",
-            "curriculo_luis_carlos.pdf"
-        )
+        self.curriculo = os.getenv("CURRICULO")
 
-        leitor = PdfReader(caminho_pdf)
+        if not self.curriculo:
 
-        self.curriculo = ""
+            caminho_curriculo = os.path.join(
+                diretorio_projeto,
+                "dados",
+                "curriculo.txt"
+            )
 
-        for pagina in leitor.pages:
+            with open(
+                caminho_curriculo,
+                "r",
+                encoding="utf-8"
+            ) as arquivo:
 
-            try:
-
-                texto = pagina.extract_text()
-
-                if texto:
-                    self.curriculo += texto
-
-            except Exception as e:
-
-                print(
-                    f"Aviso: não foi possível extrair "
-                    f"texto da página: {e}",
-                    flush=True
-                )
-
-                continue
+                self.curriculo = arquivo.read()
 
         caminho_resumo = os.path.join(
             diretorio_projeto,
@@ -73,6 +65,11 @@ class Me:
 
         resultados = []
 
+        ferramentas_disponiveis = {
+            "registrar_dados_usuario": registrar_dados_usuario,
+            "registrar_pergunta_desconhecida": registrar_pergunta_desconhecida
+        }
+
         for chamada in chamadas:
 
             nome_ferramenta = chamada.function.name
@@ -86,12 +83,9 @@ class Me:
                 flush=True
             )
 
-            ferramentas_disponiveis = {
-                    "registrar_dados_usuario": registrar_dados_usuario,
-                    "registrar_pergunta_desconhecida": registrar_pergunta_desconhecida
-                }
-
-            ferramenta = ferramentas_disponiveis.get(nome_ferramenta)
+            ferramenta = ferramentas_disponiveis.get(
+                nome_ferramenta
+            )
 
             resultado = (
                 ferramenta(**argumentos)

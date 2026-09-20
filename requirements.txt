@@ -1,5 +1,9 @@
-requests
-python-dotenv
-streamlit
-pypdf
-openai
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+dados/curriculo_luis_carlos.pdf
+dados/curriculo.txt
